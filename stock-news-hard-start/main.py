@@ -1,8 +1,11 @@
 import requests
+from twilio.rest import Client
 
 STOCK = "TSLA"
 COMPANY_NAME = "Tesla Inc"
 NEWS_API_KEY = "4ee4c1cf3922496d9aa55bebdf5f3d7a"
+TWILIO_SID = "ACd52fbc760e8a7f41b2bb29dc473b4e57"
+TWILIO_AUTH_TOKEN = "0e86ba05bed3174ec8287620d1dbf683"
 
 
 news_parameters = {
@@ -41,7 +44,21 @@ if percentage_change > 3 or percentage_change < 3:
     news_article = news_response.json()["articles"]
 
     three_articles = news_article[:3]
-    print(three_articles)
+
+    formatted_articles = [f"Headline: {article['title']}. \nBrief: {article['description']}" for article in
+                          three_articles]
+    print(formatted_articles)
+    client = Client(TWILIO_SID, TWILIO_AUTH_TOKEN)
+
+    for each_article in formatted_articles:
+        message = client.messages.create(
+            body=each_article,
+            from_="+19252332841",
+            to = "+255679384924"
+        )
+
+
+
 
 # When STOCK price increase/decreases by 5% between yesterday and the day before yesterday then print("Get News").
 #HINT 1: Get the closing price for yesterday and the day before yesterday. Find the positive difference between the two prices. e.g. 40 - 20 = -20, but the positive difference is 20.
@@ -52,7 +69,6 @@ if percentage_change > 3 or percentage_change < 3:
 ## STEP 2: Use https://newsapi.org/docs/endpoints/everything
 # Instead of printing ("Get News"), actually fetch the first 3 articles for the COMPANY_NAME. 
 #HINT 1: Think about using the Python Slice Operator
-
 
 
 ## STEP 3: Use twilio.com/docs/sms/quickstart/python
