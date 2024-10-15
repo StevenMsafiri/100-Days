@@ -6,7 +6,8 @@ NEWS_API_KEY = "4ee4c1cf3922496d9aa55bebdf5f3d7a"
 
 
 news_parameters = {
-    "q": "Tesla Inc",
+    "q": STOCK,
+    "qInTitle": COMPANY_NAME,
     "apiKey": "4ee4c1cf3922496d9aa55bebdf5f3d7a",
 
 }
@@ -26,30 +27,21 @@ NEWS_ENDPOINT = "https://newsapi.org/v2/everything"
 
 stock_response = requests.get(url=STOCK_ENDPOINT, params=stock_parameters)
 stock_data = stock_response.json()
-print(stock_data)
-previous_close_price = float(stock_data["Time Series (Daily)"]["2024-10-11"]["4. close"])
-today_close_price = float(stock_data["Time Series (Daily)"]["2024-10-10"]["4. close"])
+previous_close_price = float(stock_data["Time Series (Daily)"]["2024-10-14"]["4. close"])
+today_close_price = float(stock_data["Time Series (Daily)"]["2024-10-07"]["4. close"])
 
-def price_change():
-    if previous_close_price >= today_close_price:
-        change_in_price = previous_close_price - today_close_price
-    else:
-        change_in_price = today_close_price - previous_close_price
-    return change_in_price
+change_in_price = abs(today_close_price - previous_close_price)
 
-the_change = (price_change())
+percentage_change = (change_in_price/previous_close_price) * 100
 
-percentage_change = the_change/100
-print(percentage_change)
+# STEP 1: Use https://newsapi.org/docs/endpoints/everything
 
-# if percentage_change > 0.05 or percentage_change < 0.05:
+if percentage_change > 3 or percentage_change < 3:
+    news_response = requests.get(url="https://newsapi.org/v2/everything", params=news_parameters)
+    news_article = news_response.json()["articles"]
 
-
-## STEP 1: Use https://newsapi.org/docs/endpoints/everything
-
-news_response = requests.get(url="https://newsapi.org/v2/top-headlines", params=news_parameters)
-news = news_response.json()
-print(news)
+    three_articles = news_article[:3]
+    print(three_articles)
 
 # When STOCK price increase/decreases by 5% between yesterday and the day before yesterday then print("Get News").
 #HINT 1: Get the closing price for yesterday and the day before yesterday. Find the positive difference between the two prices. e.g. 40 - 20 = -20, but the positive difference is 20.
