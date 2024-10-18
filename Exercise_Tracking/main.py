@@ -49,5 +49,5 @@ for each in exercises_info:
 
     response = requests.post(url=SHEET_END_POINT, json=updating_parameters)
 
-response = requests.get(url=SHEET_END_POINT)
+response = requests.get(url=f"{SHEET_END_POINT}/5")
 print(response.json())
