@@ -48,7 +48,6 @@ pixel_data = {
     "quantity": input("How many minutes today? "),
 }
 
-
 response = requests.post(url=pixel_endpoint, json=pixel_data, headers=headers)
 print(response.text)
 
@@ -60,4 +59,3 @@ print(response.text)
 #
 # updated_response = requests.put(url=update_endpoint, json=update_data, headers=headers)
 # print(updated_response.text)
-
