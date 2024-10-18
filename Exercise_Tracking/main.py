@@ -1,12 +1,11 @@
 import json
-import ast
 import requests
 from datetime import datetime
 
 APP_ID = "b00a340d"
 APP_KEY = "9d94274396f3373a053cfa5033d61892"
 NU_END_POINT = "https://trackapi.nutritionix.com/v2/natural/exercise"
-SHEETY_END_POINT = "https://api.sheety.co/6db2eccc66b7d0928f25fb3daed946ee/workouts/workouts"
+SHEET_END_POINT = "https://api.sheety.co/6db2eccc66b7d0928f25fb3daed946ee/workouts/workouts"
 
 NU_header = {
     "x-app-id": APP_ID,
@@ -48,7 +47,7 @@ for each in exercises_info:
         }
     }
 
-    response = requests.post(url=SHEETY_END_POINT, json=updating_parameters)
+    response = requests.post(url=SHEET_END_POINT, json=updating_parameters)
 
-response = requests.get(url=SHEETY_END_POINT)
+response = requests.get(url=SHEET_END_POINT)
 print(response.json())
