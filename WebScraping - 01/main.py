@@ -38,14 +38,14 @@ news_response = requests.get(url="https://news.ycombinator.com/news")
 web_page = news_response.text
 
 soup = BeautifulSoup(web_page, "html.parser")
-print(soup.prettify())
+# print(soup.prettify())
 
-all_news = soup.select(selector=".titleline a")
+all_news = soup.select(selector=".titleline")
 print(all_news)
-# count = 0
-#
-# for news in all_news:
-#     print(news.getText())
-#     count +=1
-#
-# print(count)
+count = 0
+
+for news in all_news:
+    print(news.getText())
+    count +=1
+
+print(count)
