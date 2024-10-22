@@ -6,7 +6,7 @@ from spotipy.oauth2 import SpotifyOAuth
 CLIENT_ID = "5a9baddb6c4049e0b740961a8269c716"
 CLIENT_SECRET = "2b68164a9c24438891b69e18e4220a1f"
 
-access_token = "BQBZ58ClIDwkRZwVBOOwjiM52PJKsr-cJ8PtwkzJCTd7M3KWm9BkIA9zyd8qU4EcYSvUDnXKRqlWW5pmK-6iWDR8FfDZ4xpWuvNl_axcoKp35FNRky_cCIymE43Qrh_AnIcUWZZgduzP-8EnmZEwXo1WjYD3qxJVQdWzjmGmSgTBLuWnPR23QhR6AIsch5oqbhqBZL_BiDITerVDU0SwMcNiJtULbDQ_pfAlNPhQH-U1uukE4WAXRhw1LEijW1GTiTTHgrNHLCc"
+access_token = "BQC7DKdX8qMvafQn2XPz3xGdK_WILgAVvf_WeljsCEE5tii5QswBe0BCMaqYUo-LhqkqG3X1-G3FAEMK6G6EgJrihHsefnh5hJoFG5u8nexEK8VJuIlTyOlFgn4rQ7ojIPDN7KKQjfQ7vTNSYfsEj7XkHgbD_6B4Iuc7kBrnyAKXLQ3PMFp1nrPGRNaGZBdVcn7alGfWWPC8khO1XGXfvkwvqr5d_UKWHA6fdHXsvKq1T5s10f9KaGTpvkqqFV8swmzbhQ9EeIAcZkxguCnk7w"
 
 date = input("Which year would you like to travel to? Type the date in this format YYYY-MM-DD: ")
 
@@ -38,7 +38,7 @@ sp = spotipy.Spotify(auth_manager=SpotifyOAuth(client_id= CLIENT_ID,
 
 
 user_id = sp.current_user()["id"]
-print(user_id)
+# print(user_id)
 
 endpoint = f"https://api.spotify.com/v1/users/{user_id}/playlists"
 
@@ -48,22 +48,59 @@ headers = {
 }
 
 body = {
-    "name": "Classic Throw-Back",
-    "description": "My first playlist",
+    "name": f"Billboard Classic Throw-Back upto {date}",
+    "description": "My first playlist of billboard top 100",
     "public": False,
 }
 
 # Creates a playlist
 # spotify_response = requests.post(url=endpoint, headers=headers, json= body)
 
+# Creating a second playlist for another date
+second_playlist_body = {
+    "name": f"{date} Billboard Top 1000",
+    "description": f"Hot songs from billboard upto {date}",
+    "public": False,
+}
+
+# create_response = requests.post(url=endpoint, headers=headers, json=second_playlist_body)
+# print(create_response.text)
+
+# Getting the data of the created playlist
 spotify_response = requests.get(url=endpoint, headers=headers)
 playlist_data = spotify_response.json()
 # print(playlist_data)
 
 playlist_id = playlist_data["items"][0]["id"]
+# print(playlist_id)
 
 adding_url =f"{endpoint}/{playlist_id}/tracks"
+# print(adding_url)
 
+# List of songs by the spotify uri
+track_uris = []
+
+for song in all_songs:
+    # Searching the song on spotify
+    result =sp.search(q=song, type="track", limit=1)
+    try:
+        track_uri = result['tracks']['items'][0]['uri']  # Get the track URI
+        track_uris.append(track_uri)
+    except IndexError:
+        print(f"Song '{song}' not found on Spotify, skipping.")
+
+print(track_uris)
+
+if track_uris:
+    add_tracks_endpoint = adding_url
+    add_tracks_headers = headers
+    add_tracks_body = {
+        "uris": track_uris
+    }
+
+    add_tracks_response = requests.post(url=add_tracks_endpoint, headers =add_tracks_headers, json=add_tracks_body)
+    print(add_tracks_response.text)
+    print(add_tracks_response.json())
 
 
 
