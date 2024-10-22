@@ -103,6 +103,15 @@ if track_uris:
     print(add_tracks_response.json())
 
 
+""""The best solution"""
+# user_id = sp.current_user()["id"]
+# date = input("Which year do you want to travel to? Type the date in this format YYYY-MM-DD: ")
+# song_uris = ["The list of", "song URIs", "you got by", "searching Spotify"]
+#
+# playlist = sp.user_playlist_create(user=user_id, name=f"{date} Billboard 100", public=False)
+# # print(playlist)
+#
+# sp.playlist_add_items(playlist_id=playlist["id"], items=song_uris)
 
 
 
