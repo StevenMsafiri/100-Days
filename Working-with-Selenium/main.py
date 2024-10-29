@@ -8,6 +8,5 @@ options = webdriver.ChromeOptions()
 options.binary_location = "/snap/bin/chromium"
 driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()), options=options)
 
-
-driver.get("https://www.python.org/")
+driver.get("https://www.amazon.com")
 driver.quit()
